@@ -23,17 +23,17 @@
     </header>
 
     <!-- max-width for ultra wide resolutions -->
-    <div class="container-fluid" style="max-width: 1400px">
+    <div class="container-lg">
       <div class="row">
-        <aside class="col-lg-3 pb-3">
+        <aside class="container col-lg-3 pb-3">
           <h2 id="form-heading" class="mt-1 h3 form-label">
             Search for a City:
           </h2>
-          <form id="search-form" class="form">
+          <!-- <form id="search-form" class="form">
             <div class="form-inline form-group">
               <div class="input-group">
                 <input
-                  class="form-input weather-search"
+                  class="form-control"
                   type="text"
                   id="search-input"
                   placeholder="London"
@@ -43,7 +43,7 @@
                 <div class="input-group-append">
                   <button
                     type="submit"
-                    class="btn search-button"
+                    class="btn btn-primary search-button"
                     id="search-button"
                     aria-label="submit search"
                   >
@@ -53,23 +53,113 @@
                 </div>
               </div>
             </div>
+          </form> -->
+          <form class="row g-3">
+            <div>
+              <input
+                type="text"
+                class="form-control"
+                id="search-input"
+                placeholder="London"
+              />
+            </div>
+            <div>
+              <button type="submit" class="btn btn-primary">Search</button>
+            </div>
           </form>
-          <div class="list-group" id="history"></div>
+          <hr class="hr weather-hr my-3" />
+          <div class="list-group" id="history">
+            <button class="btn btn-secondary mb-3">One</button>
+            <button class="btn btn-secondary mb-3">One</button>
+            <button class="btn btn-secondary mb-3">One</button>
+          </div>
         </aside>
 
         <div class="col-lg-9 pb-3">
-          <section
-            id="today"
-            class="mt-3"
-            role="region"
-            aria-live="polite"
-          ></section>
+          <section id="today" class="mt-3" role="region" aria-live="polite">
+            <!-- placeholder - today -->
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Special title treatment</h5>
+                <p class="card-text">
+                  With supporting text below as a natural lead-in to additional
+                  content.
+                </p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+          </section>
           <section
             id="forecast"
-            class="row mt-3"
+            class="container mt-3"
             role="region"
             aria-live="polite"
-          ></section>
+          >
+            <!-- placeholder 5-day -->
+            <!-- 5 column grid -->
+            <div class="row">
+              <div class="col my-3">
+                <div class="card bg-dark h-100">
+                  <div class="card-body text-white">
+                    <h5 class="card-title">Special title treatment</h5>
+                    <p class="card-text">
+                      With supporting text below as a natural lead-in to
+                      additional content.
+                    </p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col my-3">
+                <div class="card bg-dark h-100">
+                  <div class="card-body text-white">
+                    <h5 class="card-title">01/01/2023</h5>
+                    <p class="card-text">
+                      With supporting text below as a natural lead-in to
+                      additional content.
+                    </p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col my-3">
+                <div class="card bg-dark h-100">
+                  <div class="card-body text-white">
+                    <h5 class="card-title">Special title treatment</h5>
+                    <p class="card-text">
+                      With supporting text below as a natural lead-in to
+                      additional content.
+                    </p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col my-3">
+                <div class="card bg-dark h-100">
+                  <div class="card-body text-white">
+                    <h5 class="card-title">Special title treatment</h5>
+                    <p class="card-text">
+                      With supporting text below as a natural lead-in to
+                      additional content.
+                    </p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col my-3">
+                <div class="card bg-dark h-100">
+                  <div class="card-body text-white">
+                    <h5 class="card-title">Special title treatment</h5>
+                    <p class="card-text">
+                      With supporting text below as a natural lead-in to
+                      additional content.
+                    </p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </div>

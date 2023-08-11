@@ -2,28 +2,31 @@
 const searchField = document.getElementById("search-input");
 
 // API call params
-const apiKey = "e65881984450c0477412f63cf68a5579";
-const limit = 1;
-const searchLocation = "London"; // this is a test input
+
+// ! API key should not normally be stored here
+const openWeatherApiKey = "e65881984450c0477412f63cf68a5579";
+const resultsLimit = 1;
+// ! Change this to pull from the DOM
+const userSearchlocation = "London"; // this is a test input
 
 // obtain the lat/lon for input city
-const getData = async () => {
+const getData = async (searchLocation, limit, apiKey) => {
   const response = await fetch(
     `http://api.openweathermap.org/geo/1.0/direct?q=${searchLocation}&limit=${limit}&appid=${apiKey}`
   );
   const responseJson = await response.json();
-  console.log(responseJson);
+  // console.log(responseJson);
   return responseJson;
 };
 
-const latLon = getData();
+const latLon = getData(userSearchlocation, resultsLimit, openWeatherApiKey);
 
 // get the weather data at the defined lat/lon
 latLon
   .then(async (data) => {
     // obtain weather at target lat/lon
     const response = await fetch(
-      `http://api.openweathermap.org/data/2.5/forecast?lat=${data[0].lat}&lon=${data[0].lon}&appid=${apiKey}`
+      `http://api.openweathermap.org/data/2.5/forecast?lat=${data[0].lat}&lon=${data[0].lon}&appid=${openWeatherApiKey}`
     );
     const responseJson = response.json();
     return responseJson;
