@@ -52,9 +52,16 @@
           </form>
           <hr class="hr weather-hr my-3" />
           <div class="list-group" id="history">
-            <button class="btn btn-secondary mb-3">Berlin</button>
-            <button class="btn btn-secondary mb-3">Madrid</button>
-            <button class="btn btn-secondary mb-3">Edinburgh</button>
+            <!-- These buttons get cleared out if there are actual history items -->
+            <button class="btn btn-secondary mb-3" data-location="Berlin">
+              Berlin
+            </button>
+            <button class="btn btn-secondary mb-3" data-location="Madrid">
+              Madrid
+            </button>
+            <button class="btn btn-secondary mb-3" data-location="Edinburgh">
+              Edinburgh
+            </button>
           </div>
         </aside>
 
@@ -210,7 +217,7 @@
     </div>
 
     <!-- Day.js -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
     <!-- jQuery -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
     <script src="script.js"></script>
