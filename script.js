@@ -15,18 +15,21 @@ const forecastRow = forecast.querySelector(".row");
   State variables
   ---------------
 */
-// const history = JSON.parse(localStorage.getItem("history")) || []; // could use a Set to avoid duplicate history items can remove then add again to allow it to be most recent -> has() ? delete() & add() : add()
 const history =
   new Set(JSON.parse(localStorage.getItem("history"))) || new Set(); // using a Set here to allow removal of duplicates simply
 const lastSearched =
   JSON.parse(localStorage.getItem("lastSearched")) || "London"; // set the search to use the last searched location or default to London
 
-// API call params
+/* 
+  ---------------
+  API call params
+  ---------------
+*/
 // ! API key should not normally be stored here
 const openWeatherApiKey = "e65881984450c0477412f63cf68a5579";
 const resultsLimit = 1;
-// ! Change this to pull from the DOM
-const userSearchlocation = lastSearched;
+// Change this to pull from the DOM
+// const userSearchlocation = lastSearched;
 
 /* 
   ---------
@@ -44,30 +47,9 @@ function handleSubmit(e) {
   if (location === "") return; // if location is blank, do nothing
 
   // TODO: render the cards
+  updateHistory(history, location); // ? should this be called within the fetch?
   fetchWeather(location);
-  // console.log(location);
-  // history.push(location);
-  // if (history.length > 5) {
-  //   history.splice(0, 1);
-  // }
-
-  updateHistory(history, location);
-  // if (history.has(location)) {
-  //   history.delete(location);
-  //   history.add(location);
-  // } else {
-  //   history.add(location);
-  // }
-
-  // // remove the first item in the set if there are more than 5
-  // if (history.size > 5) {
-  //   history.delete(history.values().next().value);
-  // }
-  // console.log(history);
-  // localStorage.setItem("history", JSON.stringify(Array.from(history))); // convert to array before storing in localStorage.  This is here as storing a Set in localStorage results in a blank object
-
   localStorage.setItem("lastSearched", JSON.stringify(location));
-  renderHistory(history);
   searchForm.reset();
 }
 
@@ -78,15 +60,16 @@ function handleSubmit(e) {
 function handleClick(e) {
   if (!e.target.matches("button")) return; // if it isn't a button, then return
   const location = e.target.dataset.location;
+  updateHistory(history, location); // ? should this be called within the fetch?
   fetchWeather(location);
   localStorage.setItem("lastSearched", JSON.stringify(location));
-  console.log(location);
-  // TODO: re-run the fetch and re-render the cards
-  // TODO: update the history
-  updateHistory(history, location);
-  // implement here
 }
 
+/**
+ * This function updates the search history and stores this in localStorage
+ * @param {Set} history - this is the history Set to be updated
+ * @param {string} location - this is the most recently searched location
+ */
 function updateHistory(history, location) {
   if (history.has(location)) {
     history.delete(location);
@@ -99,7 +82,7 @@ function updateHistory(history, location) {
   if (history.size > 5) {
     history.delete(history.values().next().value);
   }
-  console.log(history);
+  // console.log(history);
   localStorage.setItem("history", JSON.stringify(Array.from(history))); // convert to array before storing in localStorage.  This is here as storing a Set in localStorage results in a blank object
 }
 
@@ -122,6 +105,12 @@ const getLatLon = async (searchLocation, limit, apiKey) => {
   return responseJson;
 };
 
+/**
+ *
+ * @param {string} location - the location searched by the user
+ * @param {number} limit - the limit of results to pass through to the getLatLon function
+ * @param {string} apiKey - the Open Weather API key to use
+ */
 function fetchWeather(
   location,
   limit = resultsLimit,
@@ -141,13 +130,12 @@ function fetchWeather(
       // console.log(data[0].lat, data[0].lon);
     })
     .then((weatherData) => {
-      // weather data is obtained here in object
-      // TODO: destructure response object into variables
       const city = weatherData.city.name;
 
-      // TODO: convert unix date/time
       const dateTime = weatherData.list[0].dt;
       const dateTimeTextString = weatherData.list[0].dt_txt;
+      // converting UNIX timestamp to UK date format
+      const date = new Date(dateTime * 1000).toLocaleDateString("en-GB");
 
       const temperature = weatherData.list[0].main.temp; // in Kelvin
       const humidity = weatherData.list[0].main.humidity;
@@ -156,20 +144,11 @@ function fetchWeather(
       const windSpeed = weatherData.list[0].wind.speed;
 
       console.log(weatherData);
-      // console.log(
-      //   { city },
-      //   { dateTime },
-      //   { dateTimeTextString },
-      //   { tempK },
-      //   { humidity },
-      //   { weatherIcon },
-      //   { windSpeed }
-      // );
 
-      // TODO: inject content into the DOM
+      // inject today's forecast into the DOM
       today.innerHTML = renderToday(
         city,
-        dateTimeTextString,
+        date,
         temperature,
         humidity,
         windSpeed,
@@ -178,20 +157,48 @@ function fetchWeather(
       );
       // TODO: parse data to pick next 5 days for forecast
       // parse data
+      // 8 data points per day means that doing i = 0; i < list.length; i += 8 will show data for some point on the next day
+      const forecasts = [];
+      for (i = 0; i < weatherData.list.length; i += 8) {
+        // console.log(i, weatherData.list[i].dt_txt);
+        newDay = {
+          date: new Date(weatherData.list[i].dt * 1000).toLocaleDateString(
+            "en-GB"
+          ),
+          dateTimeTextString: weatherData.list[i].dt_txt,
+          temperature: weatherData.list[i].main.temp,
+          humidity: weatherData.list[i].main.humidity,
+          icon: weatherData.list[i].weather[0].icon,
+          iconAlt: weatherData.list[i].weather[0].description,
+          windSpeed: weatherData.list[i].wind.speed,
+        };
+        forecasts.push(newDay);
+      }
 
-      // TODO: call renderForecast
-      // renderForecast(forecasts)
+      // inject the 5 day forecast into the DOM
+      renderForecast(forecasts);
       renderHistory(history);
     })
     .catch((err) => console.error(err));
 }
 
+/**
+ *
+ * @param {string} city
+ * @param {string} date
+ * @param {number} temp
+ * @param {number} humidity
+ * @param {number} windSpeed
+ * @param {string} icon
+ * @param {string} iconAlt
+ * @returns {string}
+ */
 function renderToday(city, date, temp, humidity, windSpeed, icon, iconAlt) {
   return `
           <div class="card">
               <div class="card-body">
                 <h5 class="card-title">
-                  ${city} ${date}
+                  ${city} (${date})
                   <img
                     src="http://openweathermap.org/img/wn/${icon}@2x.png"
                     alt="${iconAlt}"
@@ -208,6 +215,16 @@ function renderToday(city, date, temp, humidity, windSpeed, icon, iconAlt) {
   `;
 }
 
+/**
+ * This function renders an individual forecast card
+ * @param {string} date
+ * @param {number} temp
+ * @param {number} humidity
+ * @param {number} windSpeed
+ * @param {string} icon
+ * @param {string} iconAlt
+ * @returns {string}
+ */
 function renderForecastCard(date, temp, humidity, windSpeed, icon, iconAlt) {
   return `
   <div class="card bg-dark h-100 col-lg my-3">
@@ -234,20 +251,30 @@ function renderForecastCard(date, temp, humidity, windSpeed, icon, iconAlt) {
   `;
 }
 
+/**
+ * This function takes an array of forecast objects and renders them to the page using renderForecastCard()
+ * @param {array} forecasts - the array of forecasts to be rendered
+ */
 function renderForecast(forecasts) {
+  forecastRow.innerHTML = "";
   forecasts.forEach((day) => {
     const forecastCard = renderForecastCard(
       day.date,
-      day.temp,
+      day.temperature,
       day.humidity,
       day.windSpeed,
       day.icon,
       day.iconAlt
     );
-    forecastRow.appendChild(forecastCard);
+    forecastRow.innerHTML += forecastCard;
+    // forecastRow.appendChild(forecastCard);
   });
 }
 
+/**
+ * This function renders the search history of the user to the page
+ * @param {Set} history
+ */
 function renderHistory(history) {
   if (history.size === 0) return; // if there is no history, do nothing
   searchHistory.innerHTML = ""; // clear our the element first
@@ -259,13 +286,6 @@ function renderHistory(history) {
     searchHistory.prepend(newBtn);
   });
 }
-
-// function render(weatherObject) {
-
-//   // TODO: parse data to pick today and next 5 days for forecast
-//   renderToday()
-//   renderForecast()
-// }
 
 /*
   ---------------
