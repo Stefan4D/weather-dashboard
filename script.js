@@ -14,14 +14,17 @@ const forecast = document.getElementById("forecast");
   State variables
   ---------------
 */
-const history = JSON.parse(localStorage.getItem("history")) || []; // could use a Set to avoid duplicate history items
+// const history = JSON.parse(localStorage.getItem("history")) || []; // could use a Set to avoid duplicate history items can remove then add again to allow it to be most recent -> has() ? delete() & add() : add()
+const history = JSON.parse(localStorage.getItem("history")) || new Set(); // could use a Set to avoid duplicate history items can remove then add again to allow it to be most recent -> has() ? delete() & add() : add()
+const lastSearched =
+  JSON.parse(localStorage.getItem("lastSearched")) || "London"; // set the search to use the last searched location or default to London
 
 // API call params
 // ! API key should not normally be stored here
 const openWeatherApiKey = "e65881984450c0477412f63cf68a5579";
 const resultsLimit = 1;
 // ! Change this to pull from the DOM
-const userSearchlocation = "London"; // this is a test input
+const userSearchlocation = lastSearched;
 
 /* 
   ---------
@@ -41,11 +44,24 @@ function handleSubmit(e) {
   // TODO: render the cards
 
   // console.log(location);
-  history.push(location);
-  if (history.length > 5) {
-    history.splice(0, 1);
+  // history.push(location);
+  // if (history.length > 5) {
+  //   history.splice(0, 1);
+  // }
+  if (history.has(location)) {
+    history.delete(location);
+    history.add(location);
+  } else {
+    history.add(location);
   }
+
+  // remove the first item in the set if there are more than 5
+  if (history.size > 5) {
+    history.delete(history.values().next().value);
+  }
+
   localStorage.setItem("history", JSON.stringify(history));
+  localStorage.setItem("lastSearched", JSON.stringify(location));
   renderHistory(history);
   searchForm.reset();
 }
@@ -57,8 +73,10 @@ function handleSubmit(e) {
 function handleClick(e) {
   if (!e.target.matches("button")) return; // if it isn't a button, then return
   const location = e.target.dataset.location;
+  localStorage.setItem("lastSearched", JSON.stringify(location));
   console.log(location);
   // TODO: re-run the fetch and re-render the cards
+  // TODO: update the history
   // implement here
 }
 
@@ -72,7 +90,7 @@ function handleClick(e) {
  * @param {string} apiKey - The API key for the Open Weather endpoint
  * @returns {array} The data from the fetch as an array with nested objects
  */
-const getData = async (searchLocation, limit, apiKey) => {
+const getLatLon = async (searchLocation, limit, apiKey) => {
   const response = await fetch(
     `http://api.openweathermap.org/geo/1.0/direct?q=${searchLocation}&limit=${limit}&appid=${apiKey}`
   );
@@ -81,15 +99,15 @@ const getData = async (searchLocation, limit, apiKey) => {
   return responseJson;
 };
 
-const latLon = getData(userSearchlocation, resultsLimit, openWeatherApiKey);
+const latLon = getLatLon(lastSearched, resultsLimit, openWeatherApiKey);
 
 // get the weather data at the defined lat/lon
 latLon
   .then(async (data) => {
     // obtain weather at target lat/lon
     const response = await fetch(
-      `http://api.openweathermap.org/data/2.5/forecast?lat=${data[0].lat}&lon=${data[0].lon}&appid=${openWeatherApiKey}`
-    );
+      `http://api.openweathermap.org/data/2.5/forecast?lat=${data[0].lat}&lon=${data[0].lon}&appid=${openWeatherApiKey}&units=metric`
+    ); // remove units=metric to go back to Kelvin, or use units=imperial for Fahrenheit
     const responseJson = response.json();
     return responseJson;
     // console.log(data[0].lat, data[0].lon);
@@ -109,7 +127,7 @@ latLon
     const weatherIconAlt = weatherData.list[0].weather[0].description; // string for the icon image .png
     const windSpeed = weatherData.list[0].wind.speed;
 
-    // console.log(weatherData);
+    console.log(weatherData);
     // console.log(
     //   { city },
     //   { dateTime },
@@ -182,7 +200,7 @@ function renderForecastCard(date, temp, humidity, windSpeed, icon, iconAlt) {
 }
 
 function renderHistory(history) {
-  if (history.length === 0) return; // if there is no history, do nothing
+  if (history.size === 0) return; // if there is no history, do nothing
   searchHistory.innerHTML = ""; // clear our the element first
   history.forEach((historyItem) => {
     const newBtn = document.createElement("button");
