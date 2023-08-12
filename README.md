@@ -32,6 +32,7 @@ This has been developed to meet the following Acceptance Criteria:
 
 - Revisited using Bootstrap components and utility classes including the built-in grid system
 - Practiced using some JSDoc notation for commenting my JavaScript code, which I found very similar to NatSpec with Solidity
+- I learned that storing Sets in localStorage doesn't work so need to convert to an array first and then convert back
 
 ## Resources used
 
