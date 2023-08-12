@@ -15,7 +15,8 @@ const forecast = document.getElementById("forecast");
   ---------------
 */
 // const history = JSON.parse(localStorage.getItem("history")) || []; // could use a Set to avoid duplicate history items can remove then add again to allow it to be most recent -> has() ? delete() & add() : add()
-const history = JSON.parse(localStorage.getItem("history")) || new Set(); // could use a Set to avoid duplicate history items can remove then add again to allow it to be most recent -> has() ? delete() & add() : add()
+const history =
+  new Set(JSON.parse(localStorage.getItem("history"))) || new Set(); // could use a Set to avoid duplicate history items can remove then add again to allow it to be most recent -> has() ? delete() & add() : add()
 const lastSearched =
   JSON.parse(localStorage.getItem("lastSearched")) || "London"; // set the search to use the last searched location or default to London
 
@@ -59,8 +60,8 @@ function handleSubmit(e) {
   if (history.size > 5) {
     history.delete(history.values().next().value);
   }
-
-  localStorage.setItem("history", JSON.stringify(history));
+  console.log(history);
+  localStorage.setItem("history", JSON.stringify(Array.from(history))); // convert to array before storing
   localStorage.setItem("lastSearched", JSON.stringify(location));
   renderHistory(history);
   searchForm.reset();
