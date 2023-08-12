@@ -98,7 +98,7 @@ function updateHistory(history, location) {
  */
 const getLatLon = async (searchLocation, limit, apiKey) => {
   const response = await fetch(
-    `http://api.openweathermap.org/geo/1.0/direct?q=${searchLocation}&limit=${limit}&appid=${apiKey}`
+    `https://api.openweathermap.org/geo/1.0/direct?q=${searchLocation}&limit=${limit}&appid=${apiKey}`
   );
   const responseJson = await response.json();
   // console.log(responseJson);
@@ -123,7 +123,7 @@ function fetchWeather(
     .then(async (data) => {
       // obtain weather at target lat/lon
       const response = await fetch(
-        `http://api.openweathermap.org/data/2.5/forecast?lat=${data[0].lat}&lon=${data[0].lon}&appid=${openWeatherApiKey}&units=metric`
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${data[0].lat}&lon=${data[0].lon}&appid=${openWeatherApiKey}&units=metric`
       ); // remove units=metric to go back to Kelvin, or use units=imperial for Fahrenheit
       const responseJson = response.json();
       return responseJson;
@@ -200,7 +200,7 @@ function renderToday(city, date, temp, humidity, windSpeed, icon, iconAlt) {
                 <h5 class="card-title">
                   ${city} (${date})
                   <img
-                    src="http://openweathermap.org/img/wn/${icon}@2x.png"
+                    src="https://openweathermap.org/img/wn/${icon}@2x.png"
                     alt="${iconAlt}"
                     height="50px"
                   />
@@ -231,7 +231,7 @@ function renderForecastCard(date, temp, humidity, windSpeed, icon, iconAlt) {
   <div class="card-body text-white">
     <h5 class="card-title">${date}</h5>
     <img
-      src="http://openweathermap.org/img/wn/${icon}@2x.png"
+      src="https://openweathermap.org/img/wn/${icon}@2x.png"
       alt="${iconAlt}"
       height="50px"
     />
