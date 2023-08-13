@@ -8,7 +8,7 @@ This assignment took a starter code package in commit [d6613e6](https://github.c
 
 The production website is deployed [here](https://stefan4d.github.io/weather-dashboard/).
 
-![Screenshot of deployed webpage]()
+![Screenshot of deployed webpage](./stefan4d.github.io_weather-dashboard_.png)
 
 This has been developed to meet the following Acceptance Criteria:
 
@@ -40,6 +40,8 @@ This has been developed to meet the following Acceptance Criteria:
 - [OpenWeatherMap Forecast5 API Docs](https://openweathermap.org/forecast5)
 - [OpenWeatherMap Geocoding API Docs](https://openweathermap.org/api/geocoding-api#direct)
 - [JSDoc: Getting Started](https://jsdoc.app/about-getting-started.html)
+- [MDN: CSS Lineaar Gradient](https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/linear-gradient)
+- [Image Color Picker](https://imagecolorpicker.com/en)
 
 ## Mark Scheme Compliance
 
