@@ -45,7 +45,38 @@ This has been developed to meet the following Acceptance Criteria:
 
 ## Mark Scheme Compliance
 
-TO BE ADDED
+### Technical Acceptance Criteria
+
+| Item                                                                                                                                                                          | Evidence                                                                                                                                                                                           |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Satisfies all of the above acceptance criteria plus the following: <br/>-Uses the OpenWeather API to retrieve weather data. <br/>-Uses localStorage to store persistent data. | The built application satisfies the acceptance criteria and uses the OpenWeather Forecast5 API as well as localStorage to store the search history as well as the most recently searched location. |
+
+### Deployment
+
+| Item                                              | Evidence                                                                    |
+| ------------------------------------------------- | --------------------------------------------------------------------------- |
+| Application deployed at live URL.                 | Live application deployed at: https://stefan4d.github.io/weather-dashboard/ |
+| Application loads with no errors.                 | No visual defects <br /> No console errors                                  |
+| Application GitHub URL submitted.                 | URL submitted                                                               |
+| GitHub repository that contains application code. | This repository contains all code.                                          |
+
+### Application Quality
+
+| Item                                                                                    | Evidence                                                                                                                                                                                             |
+| --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Application user experience is intuitive and easy to navigate.                          | Application user interface matches the mock-up and uses intuitive elements e.g. click on a history item to search again and remembering the last location searched for when visiting the site again. |
+| Application user interface style is clean and polished.                                 | As above                                                                                                                                                                                             |
+| Application resembles the mock-up functionality provided in the Challenge instructions. | Application resembles the mock-up. This includes colour-matching and applying the linear gradient to the header element.                                                                             |
+
+### Repository Quality
+
+| Item                                                                                                    | Evidence                                                                                                                                                                                                                  |
+| ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Repository has a unique name.                                                                           | Unique name used                                                                                                                                                                                                          |
+| Repository follows best practices for file structure and naming conventions.                            | Standard file naming conventions used                                                                                                                                                                                     |
+| Repository follows best practices for class/id naming conventions, indentation, quality comments, etc.  | All multi-word variables in JavaScript use camelCase<br /><br /> Indentation within code follows best practice <br /><br /> Comments have been included within the files to describe behaviour and/or intent of the code. |
+| Repository contains multiple descriptive commit messages.                                               | Multiple commits included demonstrating incremental build of final submission. Each has a clear description of changes made.                                                                                              |
+| Repository contains quality README file with description, screenshot, and link to deployed application. | This README document.                                                                                                                                                                                                     |
 
 ## License
 

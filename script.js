@@ -39,6 +39,7 @@ const resultsLimit = 1;
 
 /**
  * This function handles the submission of the location search form.
+ * @function handleSubmit
  * @param {object} e - The event object
  */
 function handleSubmit(e) {
@@ -55,6 +56,7 @@ function handleSubmit(e) {
 
 /**
  * This function handles the button clicks of history items.
+ * @function handleClick
  * @param {object} e - The event object
  */
 function handleClick(e) {
@@ -67,6 +69,7 @@ function handleClick(e) {
 
 /**
  * This function updates the search history and stores this in localStorage
+ * @function updateHistory
  * @param {Set} history - this is the history Set to be updated
  * @param {string} location - this is the most recently searched location
  */
@@ -88,7 +91,6 @@ function updateHistory(history, location) {
 
 /**
  * This function obtains the latitude / longitude for the given location
- *
  * @async
  * @function getLatLon
  * @param {string} searchLocation - The location searched by the user
@@ -106,7 +108,8 @@ const getLatLon = async (searchLocation, limit, apiKey) => {
 };
 
 /**
- *
+ * This function is the primary function for the application. It fetches the weather data and calls the render functions.
+ * @function fetchWeather
  * @param {string} location - the location searched by the user
  * @param {number} limit - the limit of results to pass through to the getLatLon function
  * @param {string} apiKey - the Open Weather API key to use
@@ -143,7 +146,7 @@ function fetchWeather(
       const weatherIconAlt = weatherData.list[0].weather[0].description; // string for the icon image .png
       const windSpeed = weatherData.list[0].wind.speed;
 
-      console.log(weatherData);
+      // console.log(weatherData);
 
       // inject today's forecast into the DOM
       today.innerHTML = renderToday(
@@ -155,7 +158,6 @@ function fetchWeather(
         weatherIcon,
         weatherIconAlt
       );
-      // TODO: parse data to pick next 5 days for forecast
       // parse data
       // 8 data points per day means that doing i = 0; i < list.length; i += 8 will show data for some point on the next day
       const forecasts = [];
@@ -183,15 +185,16 @@ function fetchWeather(
 }
 
 /**
- *
- * @param {string} city
- * @param {string} date
- * @param {number} temp
- * @param {number} humidity
- * @param {number} windSpeed
- * @param {string} icon
- * @param {string} iconAlt
- * @returns {string}
+ * This function renders the card for today's forecast
+ * @function renderToday
+ * @param {string} city - The searched location
+ * @param {string} date - today's date
+ * @param {number} temp - the temperature in degrees Celsius at the provided location
+ * @param {number} humidity - the humidity at the provided location
+ * @param {number} windSpeed - the wind speed in KPH at the provided location
+ * @param {string} icon - the icon representing the current weather conditions
+ * @param {string} iconAlt - the alt text for the icon describing the current weather conditions
+ * @returns {string} Returns the template string with the passed in variables included
  */
 function renderToday(city, date, temp, humidity, windSpeed, icon, iconAlt) {
   return `
@@ -217,13 +220,14 @@ function renderToday(city, date, temp, humidity, windSpeed, icon, iconAlt) {
 
 /**
  * This function renders an individual forecast card
+ * @function renderForecastCard
  * @param {string} date
  * @param {number} temp
  * @param {number} humidity
  * @param {number} windSpeed
  * @param {string} icon
  * @param {string} iconAlt
- * @returns {string}
+ * @returns {string} Returns the HTML as a template string with the passed in variables applied
  */
 function renderForecastCard(date, temp, humidity, windSpeed, icon, iconAlt) {
   return `
@@ -253,6 +257,7 @@ function renderForecastCard(date, temp, humidity, windSpeed, icon, iconAlt) {
 
 /**
  * This function takes an array of forecast objects and renders them to the page using renderForecastCard()
+ * @function renderForecast
  * @param {array} forecasts - the array of forecasts to be rendered
  */
 function renderForecast(forecasts) {
@@ -273,6 +278,7 @@ function renderForecast(forecasts) {
 
 /**
  * This function renders the search history of the user to the page
+ * @function renderHistory
  * @param {Set} history
  */
 function renderHistory(history) {
@@ -295,5 +301,5 @@ function renderHistory(history) {
 searchForm.addEventListener("submit", handleSubmit);
 searchHistory.addEventListener("click", handleClick);
 
-// renderHistory(history);
+// Load the weather on page load
 fetchWeather(lastSearched, resultsLimit, openWeatherApiKey);
