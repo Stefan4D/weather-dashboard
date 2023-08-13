@@ -195,7 +195,7 @@ function fetchWeather(
  */
 function renderToday(city, date, temp, humidity, windSpeed, icon, iconAlt) {
   return `
-          <div class="card">
+          <div class="card" style="border-color: rgba(170,170,170,255);">
               <div class="card-body">
                 <h5 class="card-title">
                   ${city} (${date})
@@ -227,7 +227,7 @@ function renderToday(city, date, temp, humidity, windSpeed, icon, iconAlt) {
  */
 function renderForecastCard(date, temp, humidity, windSpeed, icon, iconAlt) {
   return `
-  <div class="card bg-dark h-100 col-lg my-3">
+  <div class="card h-100 col-lg my-3" style="background: rgba(45,62,80,255);">
   <div class="card-body text-white">
     <h5 class="card-title">${date}</h5>
     <img
